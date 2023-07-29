@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const KeyTokenService = require("../services/keyToken.service");
 const { createTokenPair } = require("../auth/authUtils");
+const { getIntoData } = require("../utils");
 const RoleShop = {
   SHOP: "SHOP",
   WRITER: "WRITER",
@@ -34,32 +35,46 @@ class AccessService {
         // created privateKey, publicKey
         const { privateKey, publicKey } = crypto.generateKeyPairSync("rsa", {
           modulusLength: 4096,
+          publicKeyEncoding: {
+            type: "pkcs1",
+            format: "pem",
+          },
+          privateKeyEncoding: {
+            type: "pkcs1",
+            format: "pem",
+          },
         });
+
+        // pkcs1 = public key CryptoGraphy standards
         console.log({ privateKey, publicKey });
 
         const publicKeyString = await KeyTokenService.createKeyToken({
-          userId: newShop.userId,
-          publicKey: publicKey,
+          userId: newShop._id,
+          publicKey,
         });
-        if (publicKeyString) {
+        if (!publicKeyString) {
           return {
             code: "xxxx",
             message: "publicKeyString error",
           };
         }
+        const publicKeyObject = crypto.createPublicKey(publicKeyString);
         // created token pair
-        const token = await createTokenPair(
+        const tokens = await createTokenPair(
           { userId: newShop._id, email },
-          publicKey,
+          publicKeyString,
           privateKey
         );
-        if (token) {
-          console.log(`Created token success: ${token}`);
+        if (tokens) {
+          console.log(`Created token success: ${tokens}`);
         }
         return {
           code: 201,
           metadata: {
-            shop: newShop,
+            shop: getIntoData({
+              fields: ["_id", "email", "name"],
+              object: newShop,
+            }),
             tokens,
           },
         };

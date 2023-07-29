@@ -7,14 +7,16 @@ class KeyTokenService {
     try {
       // convert buffer to string
       const publicKeyString = publicKey.toString();
-
+      console.log("publicKey",userId);
       const tokens = await keyTokenModel.create({
         user: userId,
         publicKey: publicKeyString,
       });
-
-      return tokens ? publicKeyString : null;
-    } catch (error) {}
+      console.log(tokens);
+      return tokens ? tokens.publicKey : null;
+    } catch (error) {
+      console.log(error);
+    }
   };
 }
 
