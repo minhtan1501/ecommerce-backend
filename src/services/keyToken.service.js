@@ -6,11 +6,18 @@ class KeyTokenService {
   createKeyToken = async ({ userId, publicKey, privateKey }) => {
     try {
 
-      const tokens = await keyTokenModel.create({
+      // const tokens = await keyTokenModel.create({
+      //   user: userId,
+      //   publicKey,
+      //   privateKey
+      // });
+      const filter = {
         user: userId,
-        publicKey,
-        privateKey
-      });
+        }, update = {
+          
+        }
+      }
+      const tokens = await keyTokenModel.findOneAndUpdate(filter,update,options)
 
       return tokens ? tokens.publicKey : null;
     } catch (error) {

@@ -36,12 +36,23 @@ class AccessService {
       // Create privateKey, publicKey.
       const privateKey = crypto.randomBytes(64).toString("hex");
       const publicKey = crypto.randomBytes(64).toString("hex");
-
+    // 4.
+    // generate token
       const tokens = await createTokenPair(
         { userId: foundShop._id, email },
         publicKey,
         privateKey
       );
+
+      return {
+        metadata: {
+          shop: getIntoData({
+            fields: ["_id", "email", "name"],
+            object: foundShop,
+          }),
+          tokens,
+        },
+      };
 
   }
   signUp = async ({ name, email, password }) => {
