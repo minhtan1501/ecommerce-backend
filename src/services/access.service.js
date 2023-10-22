@@ -8,7 +8,6 @@ const { createTokenPair } = require("../auth/authUtils");
 const { getIntoData } = require("../utils");
 const { BadRequestError } = require("../core/error.response");
 const { findByEmail } = require("./shop.service");
-const keyTokenService = require("../services/keyToken.service");
 const RoleShop = {
   SHOP: "SHOP",
   WRITER: "WRITER",
@@ -44,9 +43,8 @@ class AccessService {
         publicKey,
         privateKey
       );
-
-      await keyTokenService.createKeyToken({
-        refreshToken: tokens.refreshToken, privateKey, publicKey
+      await KeyTokenService.createKeyToken({
+        refreshToken: tokens.refreshToken, privateKey, publicKey,
       })
 
       return {

@@ -17,7 +17,7 @@ class KeyTokenService {
       const update = {
         publicKey,
         privateKey,
-        refreshTokenUsed: [],
+        refreshTokensUsed: [],
         refreshToken,
       };
 
