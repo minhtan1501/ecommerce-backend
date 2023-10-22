@@ -33,9 +33,9 @@ const permission = (permission) => {
     if (!req.objKey.permissions) {
       return sendError(res, "Permission denied");
     }
-    console.log("permission");
     const validPermission = req.objKey.permissions.includes(permission);
     if (!validPermission) {
+      console.log("Error permission");
       return sendError(res, "Permission denied");
     }
     next();

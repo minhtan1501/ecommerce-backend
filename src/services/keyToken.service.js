@@ -11,7 +11,7 @@ class KeyTokenService {
       //   privateKey
       // });
       const filter = {
-        user: userId,
+       userId,
       };
 
       const update = {
