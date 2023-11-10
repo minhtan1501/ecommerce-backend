@@ -1,5 +1,7 @@
 "use strict";
 
+const reasonPhrases = require("../utils/reasonPhrases");
+
 const StatusCode = {
   FORBIDDEN: 403,
   CONFLICT: 409,
@@ -26,19 +28,37 @@ class ConflictRequestError extends ErrorResponse {
   }
 }
 
-
 class BadRequestError extends ErrorResponse {
-    constructor(
-      message = ReasonStatusCode.CONFLICT,
-      statusCode = StatusCode.FORBIDDEN
-    ) {
-      super(message, statusCode);
-    }
+  constructor(
+    message = ReasonStatusCode.CONFLICT,
+    statusCode = StatusCode.FORBIDDEN
+  ) {
+    super(message, statusCode);
   }
-  
-  
+}
+
+class AuthFailureError extends ErrorResponse {
+  constructor(
+    message = reasonPhrases.UNAUTHORIZED,
+    statusCode = StatusCode.UNAUTHORIZED
+  ) {
+    super(message, statusCode);
+  }
+}
+
+class NotFoundError extends ErrorResponse {
+  constructor(
+    message = reasonPhrases.NOT_FOUND,
+    statusCode = StatusCode.NOT_FOUND
+  ) {
+    super(message, statusCode);
+  }
+}
+
 
 module.exports = {
-    ConflictRequestError,
-    BadRequestError
-}
+  ConflictRequestError,
+  BadRequestError,
+  AuthFailureError,
+  NotFoundError
+};

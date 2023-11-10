@@ -6,7 +6,7 @@ const crypto = require("crypto");
 const KeyTokenService = require("../services/keyToken.service");
 const { createTokenPair } = require("../auth/authUtils");
 const { getIntoData } = require("../utils");
-const { BadRequestError } = require("../core/error.response");
+const { BadRequestError, AuthFailureError } = require("../core/error.response");
 const { findByEmail } = require("./shop.service");
 const RoleShop = {
   SHOP: "SHOP",
@@ -23,6 +23,11 @@ class AccessService {
     4 - generate tokens
     5 - get data return login
   */
+
+  logout = async (keyStore) => {
+    const delKey = KeyTokenService.removeKeyById(keyStore._id);
+    console.log({ delKey });
+  };
 
   login = async ({ email, password, refreshToken }) => {
     // 1.
@@ -52,13 +57,11 @@ class AccessService {
     });
 
     return {
-      metadata: {
-        shop: getIntoData({
-          fields: ["_id", "email", "name"],
-          object: foundShop,
-        }),
-        tokens,
-      },
+      shop: getIntoData({
+        fields: ["_id", "email", "name"],
+        object: foundShop,
+      }),
+      tokens,
     };
   };
   signUp = async ({ name, email, password }) => {
